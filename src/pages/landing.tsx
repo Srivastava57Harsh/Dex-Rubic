@@ -1,6 +1,18 @@
 import { ConnectButton } from "@rainbow-me/rainbowkit";
+import Networks from "../components/NetworksModal";
+import { useState } from "react";
 
 export default function Landing() {
+  const [isPopupOpen, setPopupOpen] = useState(false);
+
+  const handleOpenPopup = () => {
+    setPopupOpen(true);
+  };
+
+  const handleClosePopup = () => {
+    setPopupOpen(false);
+  };
+
   return (
     <>
       <div className="bg-white pb-6 sm:pb-8 lg:pb-12">
@@ -25,7 +37,10 @@ export default function Landing() {
                 <div className="">
                   <div className=" bg-slate-700 p-4 rounded-2xl mb-5 sm:mb-0">
                     <div className="flex">
-                      <div className="flex flex-col ">
+                      <div
+                        className="flex flex-col cursor-pointer"
+                        onClick={handleOpenPopup}
+                      >
                         <img
                           src="https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/ethereum.svg"
                           alt="bt-image"
@@ -104,6 +119,7 @@ export default function Landing() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Amount"
                         required
+                        disabled
                       />
                     </div>
                   </div>
@@ -113,6 +129,13 @@ export default function Landing() {
           </section>
         </div>
       </div>
+      {isPopupOpen && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <Networks onClose={handleClosePopup} />
+          </div>
+        </div>
+      )}
     </>
   );
 }
