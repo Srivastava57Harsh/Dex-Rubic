@@ -110,11 +110,20 @@ export default function Landing() {
     setIsLoading(false);
   };
 
-  const handleSwap = () => {
+  const handleSwap = async (index: number) => {
     if (address) {
+      try {
+        const trade = await providersArray[index].trade.swap();
+        const transactionHash = await trade.swap();
+        alert(`Swap Successful. Transaction Hash:  ${transactionHash}`);
+      } catch (e: any) {
+        alert("Swap Transaction Failed");
+        alert(e);
+        console.log(e);
+      }
+    } else {
+      alert("Please connect your wallet.");
     }
-
-    alert("Please connect your wallet.");
   };
 
   useEffect(() => {
@@ -125,6 +134,12 @@ export default function Landing() {
       handleInstantTrade();
     }
   }, [amount]);
+
+  useEffect(() => {
+    if (address) {
+      localStorage.setItem("userAddress", address);
+    }
+  }, [address]);
 
   return (
     <>
@@ -272,7 +287,12 @@ export default function Landing() {
                           index === 0 ? "border border-green-500" : ""
                         }`}
                       >
-                        <div className="max-w-lg p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-600">
+                        <div
+                          className="max-w-lg p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 cursor-pointer hover:bg-gray-600"
+                          onClick={() => {
+                            handleSwap(index);
+                          }}
+                        >
                           <a>
                             <h5 className="-mt-3 mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white text-left -ml-2">
                               <div className="inline-flex gap-7">

@@ -12,12 +12,11 @@ import {
 import { useAccount } from "wagmi";
 
 export async function InitializeApp() {
-  const { address } = useAccount();
-
+  const address = localStorage.getItem("userAddress");
   const walletProvider: WalletProvider = {
     [CHAIN_TYPE.EVM]: {
       //@ts-ignore
-      address: address,
+      address: address || "0x8EA809076374708aEF0d6e9C3F0a7A64CAD17368",
       //@ts-ignore
       core: window.ethereum,
     },
@@ -36,6 +35,10 @@ export async function InitializeApp() {
       },
       [BLOCKCHAIN_NAME.POLYGON]: {
         rpcList: ["https://polygon-rpc.com"],
+      },
+      //@ts-ignore
+      [BLOCKCHAIN_NAME.SOLANA]: {
+        rpcList: ["https://go.getblock.io/d7fbead76a4341df810b43de05587bdf"],
       },
     },
     walletProvider,
@@ -76,7 +79,7 @@ export async function InstantTrades(
     { blockchain: toBlockchain, address: toTokenAddress }
   );
 
-  console.log("NAHI", wrappedTrades);
+  // console.log("NAHI", wrappedTrades);
 
   wrappedTrades.forEach((wrappedTrade: any) => {
     const tradeType: TradeType = wrappedTrade.type;
