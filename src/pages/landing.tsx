@@ -4,13 +4,51 @@ import { useState } from "react";
 
 export default function Landing() {
   const [isPopupOpen, setPopupOpen] = useState(false);
+  const [selectionSide, setSelectionSide] = useState("left");
 
-  const handleOpenPopup = () => {
+  const [leftSelectedTokenData, setLeftSelectedTokenData] = useState({
+    networkName: "" || "Ethereum",
+    networkImage: "" || "ethereum",
+    tokenImage: "" || "ethereum",
+    tokenName: "" || "Ethereum",
+  });
+
+  const [rightSelectedTokenData, setRightSelectedTokenData] = useState({
+    networkName: "" || "Ethereum",
+    networkImage: "" || "ethereum",
+    tokenImage: "" || "ethereum",
+    tokenName: "" || "Ethereum",
+  });
+
+  const handleLeftOpenPopup = () => {
     setPopupOpen(true);
+    setSelectionSide("left");
+  };
+
+  const handleRightOpenPopup = () => {
+    setPopupOpen(true);
+    setSelectionSide("right");
   };
 
   const handleClosePopup = () => {
     setPopupOpen(false);
+  };
+
+  const onTokenClick = (token: any) => {
+    const selectedData = {
+      networkName: token.blockchainNetwork,
+      networkImage: `https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/${token.blockchainNetwork.toLowerCase()}.svg`,
+      tokenImage: token.image,
+      tokenName: token.name,
+    };
+
+    if (selectionSide === "left") {
+      setLeftSelectedTokenData(selectedData);
+    } else if (selectionSide === "right") {
+      setRightSelectedTokenData(selectedData);
+    }
+
+    handleClosePopup();
   };
 
   return (
@@ -39,25 +77,25 @@ export default function Landing() {
                     <div className="flex">
                       <div
                         className="flex flex-col cursor-pointer"
-                        onClick={handleOpenPopup}
+                        onClick={handleLeftOpenPopup}
                       >
                         <img
-                          src="https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/ethereum.svg"
+                          src={leftSelectedTokenData.networkImage}
                           alt="bt-image"
                           className="w-[50px] h-[50px] max-h-[50px] rounded-[100px]"
                         />
                         <img
-                          src="https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/ethereum.svg"
+                          src={leftSelectedTokenData.tokenImage}
                           alt="bt-image"
                           className="w-[35px] h-[35px] max-h-[35px] rounded-[100px] -mt-[15px] ml-[20px]"
                         />
                       </div>
                       <div className="flex flex-col justify-center -mt-[15px]">
-                        <span className="font-bold text-lg text-white -ml-[22px]">
-                          Coin name
+                        <span className="font-bold text-lg text-white ml-[13px]">
+                          {leftSelectedTokenData.tokenName}
                         </span>
                         <span className="font-normal text-xl text-slate-400 ml-[15px]">
-                          Network name
+                          {leftSelectedTokenData.networkName}
                         </span>
                       </div>
                     </div>
@@ -91,24 +129,27 @@ export default function Landing() {
                 <div className="">
                   <div className=" bg-slate-700 p-4 rounded-2xl mb-5 sm:mb-0">
                     <div className="flex">
-                      <div className="flex flex-col ">
+                      <div
+                        className="flex flex-col cursor-pointer"
+                        onClick={handleRightOpenPopup}
+                      >
                         <img
-                          src="https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/ethereum.svg"
+                          src={rightSelectedTokenData.networkImage}
                           alt="bt-image"
                           className="w-[50px] h-[50px] max-h-[50px] rounded-[100px]"
                         />
                         <img
-                          src="https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/ethereum.svg"
+                          src={rightSelectedTokenData.tokenImage}
                           alt="bt-image"
                           className="w-[35px] h-[35px] max-h-[35px] rounded-[100px] -mt-[15px] ml-[20px]"
                         />
                       </div>
                       <div className="flex flex-col justify-center -mt-[15px]">
-                        <span className="font-bold text-lg text-white -ml-[22px]">
-                          Coin name
+                        <span className="font-bold text-lg text-white ml-[13px]">
+                          {rightSelectedTokenData.tokenName}
                         </span>
                         <span className="font-normal text-xl text-slate-400 ml-[15px]">
-                          Network name
+                          {rightSelectedTokenData.networkName}
                         </span>
                       </div>
                     </div>
@@ -119,7 +160,6 @@ export default function Landing() {
                         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                         placeholder="Amount"
                         required
-                        disabled
                       />
                     </div>
                   </div>
@@ -132,7 +172,7 @@ export default function Landing() {
       {isPopupOpen && (
         <div className="popup-overlay">
           <div className="popup-content">
-            <Networks onClose={handleClosePopup} />
+            <Networks onClose={handleClosePopup} onTokenClick={onTokenClick} />
           </div>
         </div>
       )}

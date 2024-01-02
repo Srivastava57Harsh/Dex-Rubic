@@ -1,10 +1,23 @@
 import React, { useEffect, useState } from "react";
 
-const Networks = ({ onClose }: { onClose: () => void }) => {
+const Networks = ({
+  onClose,
+  onTokenClick,
+}: {
+  onClose: () => void;
+  onTokenClick: (token: any) => void;
+}) => {
   const [tokenArray, setTokenArray] = useState<any[]>([]);
   const [dropdownVisibility, setDropdownVisibility] = useState<{
     [key: string]: boolean;
   }>({});
+
+  const [selectedTokenData, setSelectedTokenData] = useState({
+    networkName: "",
+    networkImage: "",
+    tokenImage: "",
+    tokenName: "",
+  });
 
   useEffect(() => {
     const fetchTokens = async (network: string) => {
@@ -47,33 +60,18 @@ const Networks = ({ onClose }: { onClose: () => void }) => {
     }));
   };
 
-  const renderToken = (token: any) => (
-    <li key={token.address}>
-      <a
-        href="#"
-        className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-      >
-        <img
-          className="w-6 h-6 me-2 rounded-full"
-          src={token.image}
-          alt={`${token.name} image`}
-        />
-        {token.name}
-      </a>
-    </li>
-  );
-
   const renderDropdown = (network: string) => (
     <div
       key={network}
       id={`dropdownUsers_${network}`}
       className={`z-10 ${
         dropdownVisibility[network] ? "" : "hidden"
-      } bg-white rounded-lg shadow dark:bg-gray-700 mt-2 w-full`}
+      } bg-white rounded-lg shadow dark:bg-gray-700 mt-2 w-full overflow-hidden`}
     >
       <ul
-        className="h-48 py-2 overflow-y-auto text-gray-700 dark:text-gray-200"
+        className="h-48 py-2  text-gray-700 dark:text-gray-200 overflow-y-scroll no-scrollbar"
         aria-labelledby={`dropdownUsersButton_${network}`}
+        style={{ scrollbarWidth: "none" }}
       >
         {tokenArray
           .filter(
@@ -81,7 +79,7 @@ const Networks = ({ onClose }: { onClose: () => void }) => {
               token.blockchainNetwork.toLowerCase() === network.toLowerCase()
           )
           .map((token: any) => (
-            <li key={token.address}>
+            <li key={token.address} onClick={() => onTokenClick(token)}>
               <a
                 href="#"
                 className="flex items-center px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
@@ -131,25 +129,27 @@ const Networks = ({ onClose }: { onClose: () => void }) => {
                   alt={network}
                   loading="lazy"
                   width="42"
-                  className="rounded-full "
+                  className="rounded-full"
                   src={`https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/${network.toLowerCase()}.svg`}
                 />
-                {network}
-                <svg
-                  className="w-2.5 h-2.5 ms-3"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
+                <span>{network}</span>
+                <div className="">
+                  <svg
+                    className="w-2.5 h-2.5 ms-3 "
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 10 6"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="m1 1 4 4 4-4"
+                    />
+                  </svg>
+                </div>
               </button>
 
               {renderDropdown(network)}
