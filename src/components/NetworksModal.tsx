@@ -47,9 +47,9 @@ const Networks = ({
     console.log(tokenArray);
   }, [tokenArray]);
 
-  useEffect(() => {
-    InstantTrades();
-  });
+  // useEffect(() => {
+  //   InstantTrades();
+  // });
 
   const toggleDropdown = (network: string) => {
     setDropdownVisibility((prevVisibility) => ({

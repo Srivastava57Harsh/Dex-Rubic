@@ -12,12 +12,12 @@ import {
 import { useAccount } from "wagmi";
 
 export async function InitializeApp() {
-  // const { address } = useAccount();
+  const { address } = useAccount();
 
   const walletProvider: WalletProvider = {
     [CHAIN_TYPE.EVM]: {
       //@ts-ignore
-      address: "0x8EA809076374708aEF0d6e9C3F0a7A64CAD17368",
+      address: address,
       //@ts-ignore
       core: window.ethereum,
     },
@@ -46,14 +46,29 @@ export async function InitializeApp() {
   return rubicSDK;
 }
 
-export async function InstantTrades() {
+export async function InstantTrades(
+  fromChain: any,
+  fromToken: string,
+  amount: number,
+  toChain: any,
+  toToken: string
+) {
   const rubicSDK = await InitializeApp();
 
-  const fromBlockchain = BLOCKCHAIN_NAME.ETHEREUM;
-  const fromTokenAddress = "0x3330BFb7332cA23cd071631837dC289B09C33333"; // ETH
-  const fromAmount = 100;
-  const toBlockchain = BLOCKCHAIN_NAME.POLYGON;
-  const toTokenAddress = "0xc2132d05d31c914a87c6611c10748aeb04b58e8f"; // BUSD
+  const blockchains = {
+    ETHEREUM: BLOCKCHAIN_NAME.ETHEREUM,
+    POLYGON: BLOCKCHAIN_NAME.POLYGON,
+    AVALANCHE: BLOCKCHAIN_NAME.AVALANCHE,
+    SOLANA: BLOCKCHAIN_NAME.SOLANA,
+  };
+
+  //@ts-ignore
+  const fromBlockchain = blockchains[fromChain.toUpperCase()];
+  const fromTokenAddress = fromToken; // ETH
+  const fromAmount = amount;
+  //@ts-ignore
+  const toBlockchain = blockchains[toChain.toUpperCase()];
+  const toTokenAddress = toToken; // BUSD
 
   const wrappedTrades = await rubicSDK.crossChainManager.calculateTrade(
     { blockchain: fromBlockchain, address: fromTokenAddress },
@@ -71,12 +86,15 @@ export async function InstantTrades() {
       console.log(`hi: ${wrappedTrade.error}`);
     } else {
       const trade = wrappedTrade.trade!;
-      console.log(`result: ${trade.to.tokenAmount.toFormat(3)}`);
+      const amount = trade.to.tokenAmount.toFormat(3);
+      console.log(`result: ${amount}`);
 
       // explore trades info
       if (trade instanceof EvmCrossChainTrade) {
-        console.log(trade.gasData);
+        console.log("GAS", trade.gasData);
       }
     }
   });
+
+  return wrappedTrades;
 }
