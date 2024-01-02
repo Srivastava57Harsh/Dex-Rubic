@@ -9,6 +9,8 @@ const Networks = ({
   onTokenClick: (token: any) => void;
 }) => {
   const [tokenArray, setTokenArray] = useState<any[]>([]);
+  const [openNetwork, setOpenNetwork] = useState<string | null>(null);
+
   const [dropdownVisibility, setDropdownVisibility] = useState<{
     [key: string]: boolean;
   }>({});
@@ -47,15 +49,10 @@ const Networks = ({
     console.log(tokenArray);
   }, [tokenArray]);
 
-  // useEffect(() => {
-  //   InstantTrades();
-  // });
-
   const toggleDropdown = (network: string) => {
-    setDropdownVisibility((prevVisibility) => ({
-      ...prevVisibility,
-      [network]: !prevVisibility[network],
-    }));
+    setOpenNetwork((prevOpenNetwork) =>
+      prevOpenNetwork === network ? null : network
+    );
   };
 
   const renderDropdown = (network: string) => (
@@ -63,7 +60,7 @@ const Networks = ({
       key={network}
       id={`dropdownUsers_${network}`}
       className={`z-10 ${
-        dropdownVisibility[network] ? "" : "hidden"
+        openNetwork === network ? "" : "hidden"
       } bg-white rounded-lg shadow dark:bg-gray-700 mt-2 w-full overflow-hidden`}
     >
       <ul
