@@ -1,25 +1,62 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+//@ts-ignore
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import "./App.css";
+import {
+  getDefaultWallets,
+  RainbowKitProvider,
+  darkTheme,
+  //@ts-ignore
+} from "@rainbow-me/rainbowkit";
+import "@rainbow-me/rainbowkit/styles.css";
+import { configureChains, createConfig, WagmiConfig } from "wagmi";
+import { polygonMumbai, sepolia, modeTestnet, goerli } from "wagmi/chains";
+import { publicProvider } from "wagmi/providers/public";
+import Landing from "./pages/landing";
+
+const { chains, publicClient } = configureChains(
+  [modeTestnet, sepolia, polygonMumbai, goerli],
+  [
+    alchemyProvider({ apiKey: "nGNX2rQ-BAd_erhkV5BCRFI_0FHnl1a3" }),
+    publicProvider(),
+  ]
+);
+
+const { connectors } = getDefaultWallets({
+  appName: "Mode Pay",
+  projectId: "b20ec248fdbe746a0f8306abfacf7468",
+  chains,
+});
+
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors,
+  publicClient,
+});
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className=" text-blue-500">
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <WagmiConfig config={wagmiConfig}>
+        <RainbowKitProvider
+          chains={chains}
+          theme={darkTheme({
+            accentColor: "#353535",
+            accentColorForeground: "#FFF",
+            borderRadius: "medium",
+            fontStack: "system",
+            overlayBlur: "small",
+          })}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          {/* <AddFriend /> */}
+          <Router>
+            <Routes>
+              <Route path="/" Component={Landing} />
+            </Routes>
+          </Router>
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </>
   );
 }
 
