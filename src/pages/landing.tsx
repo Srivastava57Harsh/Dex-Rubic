@@ -8,15 +8,23 @@ export default function Landing() {
 
   const [leftSelectedTokenData, setLeftSelectedTokenData] = useState({
     networkName: "" || "Ethereum",
-    networkImage: "" || "ethereum",
-    tokenImage: "" || "ethereum",
+    networkImage:
+      "" ||
+      "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/ethereum.svg",
+    tokenImage:
+      "" ||
+      "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/ethereum.svg",
     tokenName: "" || "Ethereum",
   });
 
   const [rightSelectedTokenData, setRightSelectedTokenData] = useState({
     networkName: "" || "Ethereum",
-    networkImage: "" || "ethereum",
-    tokenImage: "" || "ethereum",
+    networkImage:
+      "" ||
+      "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/ethereum.svg",
+    tokenImage:
+      "" ||
+      "https://raw.githubusercontent.com/lifinance/types/main/src/assets/icons/chains/ethereum.svg",
     tokenName: "" || "Ethereum",
   });
 

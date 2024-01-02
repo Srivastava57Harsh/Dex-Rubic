@@ -10,12 +10,18 @@ import {
 } from "@rainbow-me/rainbowkit";
 import "@rainbow-me/rainbowkit/styles.css";
 import { configureChains, createConfig, WagmiConfig } from "wagmi";
-import { polygonMumbai, sepolia, modeTestnet, goerli } from "wagmi/chains";
+import {
+  polygonMumbai,
+  sepolia,
+  modeTestnet,
+  goerli,
+  mainnet,
+} from "wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import Landing from "./pages/landing";
 
 const { chains, publicClient } = configureChains(
-  [modeTestnet, sepolia, polygonMumbai, goerli],
+  [modeTestnet, sepolia, polygonMumbai, goerli, mainnet],
   [
     alchemyProvider({ apiKey: "nGNX2rQ-BAd_erhkV5BCRFI_0FHnl1a3" }),
     publicProvider(),

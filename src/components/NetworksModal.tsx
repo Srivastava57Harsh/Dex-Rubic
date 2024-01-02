@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { InstantTrades } from "../services/rubic";
 
 const Networks = ({
   onClose,
@@ -11,13 +12,6 @@ const Networks = ({
   const [dropdownVisibility, setDropdownVisibility] = useState<{
     [key: string]: boolean;
   }>({});
-
-  const [selectedTokenData, setSelectedTokenData] = useState({
-    networkName: "",
-    networkImage: "",
-    tokenImage: "",
-    tokenName: "",
-  });
 
   useEffect(() => {
     const fetchTokens = async (network: string) => {
@@ -50,8 +44,12 @@ const Networks = ({
   }, []);
 
   useEffect(() => {
-    console.log(tokenArray[0]);
+    console.log(tokenArray);
   }, [tokenArray]);
+
+  useEffect(() => {
+    InstantTrades();
+  });
 
   const toggleDropdown = (network: string) => {
     setDropdownVisibility((prevVisibility) => ({
