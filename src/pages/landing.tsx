@@ -116,10 +116,18 @@ export default function Landing() {
         const trade = await providersArray[index].trade.swap();
         const transactionHash = await trade.swap();
         alert(`Swap Successful. Transaction Hash:  ${transactionHash}`);
-      } catch (e: any) {
-        alert("Swap Transaction Failed");
-        alert(e);
-        console.log(e);
+      } catch (error) {
+        console.error("Swap Transaction Failed:", error);
+
+        if (error instanceof Error) {
+          alert(
+            "Swap Transaction Failed: An error occurred. Please check the console for details."
+          );
+        } else {
+          alert(
+            "Swap Transaction Failed: Unknown error. Please check the console for details."
+          );
+        }
       }
     } else {
       alert("Please connect your wallet.");
